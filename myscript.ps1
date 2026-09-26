@@ -9,7 +9,7 @@ function Show-Menu {
     Write-Host "    [2] Chạy GetIWC (getiwc.online)"
     Write-Host "    [3] Kiểm tra bản quyền Windows (slmgr /dli)"
     Write-Host "    [4] Xem Serial Number BIOS"
-    Write-Host "    [5] Tải & chạy ShowKeyPlus"
+    Write-Host "    [5] Mở Kho Lưu Trữ / Tải ShowKeyPlus (Google Drive)" -ForegroundColor Yellow
     Write-Host "    [0] Thoát"
     Write-Host ""
     Write-Host "==========================================================================" -ForegroundColor Cyan
@@ -20,8 +20,8 @@ do {
     Show-Menu
     
     # Lắng nghe phím gõ trực tiếp (không cần nhấn Enter)
-    $key = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
-    $char = $key.Character
+    $key =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+    $char =$key.Character
     Write-Host $char -ForegroundColor Cyan
     Start-Sleep -Milliseconds 150
 
@@ -30,26 +30,32 @@ do {
             Write-Host "`n[>] Đang chạy License Info..." -ForegroundColor Green
             irm https://license.info.vn | iex
             Write-Host "`nNhấn phím bất kỳ để quay lại menu..." -ForegroundColor Gray
-            $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+            $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         }
         '2' {
             Write-Host "`n[>] Đang chạy GetIWC..." -ForegroundColor Green
             irm getiwc.online | iex
             Write-Host "`nNhấn phím bất kỳ để quay lại menu..." -ForegroundColor Gray
-            $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+            $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         }
         '3' {
             Write-Host "`n[>] Đang kiểm tra bản quyền Windows (slmgr /dli)..." -ForegroundColor Green
             slmgr /dli
             Write-Host "`nNhấn phím bất kỳ để quay lại menu..." -ForegroundColor Gray
-            $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+            $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         }
         '4' {
             Write-Host "`n[>] Đang truy xuất Serial Number BIOS..." -ForegroundColor Green
             $serial = (Get-CimInstance -ClassName Win32_BIOS).SerialNumber
             Write-Host "--> Serial Number: $serial" -ForegroundColor Yellow
             Write-Host "`nNhấn phím bất kỳ để quay lại menu..." -ForegroundColor Gray
-            $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+            $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        }
+        '5' {
+            Write-Host "`n[>] Đang mở thư mục Google Drive..." -ForegroundColor Green
+            Start-Process "https://drive.google.com/drive/folders/1MJzDJVXRTIlu1AQMLq-XQu4pXjwZF0vM"
+            Write-Host "`nNhấn phím bất kỳ để quay lại menu..." -ForegroundColor Gray
+            $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         }
         '0' {
             Write-Host "`n[!] Đang thoát chương trình..." -ForegroundColor Red
