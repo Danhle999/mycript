@@ -9,7 +9,7 @@ function Show-Menu {
     Write-Host "    [2] Chạy GetIWC (getiwc.online)"
     Write-Host "    [3] Kiểm tra bản quyền Windows (slmgr /dli)"
     Write-Host "    [4] Xem Serial Number BIOS"
-    Write-Host "    [5] Tải phần mềm về máy (Downloads)"
+    Write-Host "    [5] Tải & cài đặt ShowKeyPlus (ShowKeyPlus Installer.exe)"
     Write-Host "    [0] Thoát"
     Write-Host ""
     Write-Host "==========================================================================" -ForegroundColor Cyan
@@ -20,8 +20,8 @@ do {
     Show-Menu
     
     # Lắng nghe phím gõ trực tiếp (không cần nhấn Enter)
-    $key =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
-    $char =$key.Character
+    $key = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+    $char = $key.Character
     Write-Host $char -ForegroundColor Cyan
     Start-Sleep -Milliseconds 150
 
@@ -30,46 +30,51 @@ do {
             Write-Host "`n[>] Đang chạy License Info..." -ForegroundColor Green
             irm https://license.info.vn | iex
             Write-Host "`nNhấn phím bất kỳ để quay lại menu..." -ForegroundColor Gray
-            $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+            $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         }
         '2' {
             Write-Host "`n[>] Đang chạy GetIWC..." -ForegroundColor Green
             irm getiwc.online | iex
             Write-Host "`nNhấn phím bất kỳ để quay lại menu..." -ForegroundColor Gray
-            $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+            $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         }
         '3' {
             Write-Host "`n[>] Đang kiểm tra bản quyền Windows (slmgr /dli)..." -ForegroundColor Green
-            # Chạy trực tiếp lệnh slmgr /dli
             slmgr /dli
             Write-Host "`nNhấn phím bất kỳ để quay lại menu..." -ForegroundColor Gray
-            $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+            $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         }
         '4' {
             Write-Host "`n[>] Đang truy xuất Serial Number BIOS..." -ForegroundColor Green
             $serial = (Get-CimInstance -ClassName Win32_BIOS).SerialNumber
             Write-Host "--> Serial Number: $serial" -ForegroundColor Yellow
             Write-Host "`nNhấn phím bất kỳ để quay lại menu..." -ForegroundColor Gray
-            $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+            $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         }
         '5' {
-            Write-Host "`n[>] Đang tải phần mềm về thư mục Downloads..." -ForegroundColor Green
+            Write-Host "`n[>] Đang tải ShowKeyPlus Installer từ GitHub..." -ForegroundColor Green
             
-            # 💡 Thay liên kết dưới đây bằng đường dẫn Direct Link (Raw hoặc Release) file phần mềm của bạn
-            $downloadUrl = "https://github.com/Danhle999/myscript/releases/download/v1.0.0/PhanMem.exe"
+            # Cấu hình TLS 1.2
+            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+            $ProgressPreference = 'SilentlyContinue'
             
-            # Đường dẫn lưu file trực tiếp vào thư mục Downloads của người dùng
-            $savePath = "$env:USERPROFILE\Downloads\PhanMem.exe"
+            # Direct Raw Link tới file ShowKeyPlus Installer.exe trong Repo
+            $downloadUrl = "https://raw.githubusercontent.com/Danhle999/myscript/main/ShowKeyPlus%20Installer.exe"
+            $savePath = "$env:USERPROFILE\Downloads\ShowKeyPlus Installer.exe"
             
             try {
-                Invoke-WebRequest -Uri $downloadUrl -OutFile $savePath -ErrorAction Stop
-                Write-Host "--> Tải thành công! File đã được lưu tại: $savePath" -ForegroundColor Yellow
+                Invoke-WebRequest -Uri $downloadUrl -OutFile$savePath -UseBasicParsing -ErrorAction Stop
+                Write-Host "--> Tải thành công! File lưu tại: $savePath" -ForegroundColor Yellow
                 
-                # Tự động mở file vừa tải (Nếu không muốn tự mở, bạn có thể xóa dòng dưới)
+                # Khởi chạy bộ cài đặt sau khi tải xong
+                Write-Host "--> Đang mở file cài đặt..." -ForegroundColor Cyan
                 Start-Process $savePath
             }
             catch {
-                Write-Host "--> Lỗi khi tải file: $_" -ForegroundColor Red
+                Write-Host "`n[!] LỖI TẢI FILE: $_" -ForegroundColor Red
+            }
+            finally {
+                $ProgressPreference = 'Continue'
             }
 
             Write-Host "`nNhấn phím bất kỳ để quay lại menu..." -ForegroundColor Gray
