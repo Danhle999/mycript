@@ -9,10 +9,11 @@ function Show-Menu {
     Write-Host "    [2] Chạy GetIWC (getiwc.online)"
     Write-Host "    [3] Kiểm tra bản quyền Windows (slmgr /dli)"
     Write-Host "    [4] Xem Serial Number BIOS"
+    Write-Host "    [5] Tải phần mềm về máy (Downloads)"
     Write-Host "    [0] Thoát"
     Write-Host ""
     Write-Host "==========================================================================" -ForegroundColor Cyan
-    Write-Host "Chọn chức năng [1-4, 0]: " -NoNewline -ForegroundColor Yellow
+    Write-Host "Chọn chức năng [1-5, 0]: " -NoNewline -ForegroundColor Yellow
 }
 
 do {
@@ -48,6 +49,29 @@ do {
             Write-Host "`n[>] Đang truy xuất Serial Number BIOS..." -ForegroundColor Green
             $serial = (Get-CimInstance -ClassName Win32_BIOS).SerialNumber
             Write-Host "--> Serial Number: $serial" -ForegroundColor Yellow
+            Write-Host "`nNhấn phím bất kỳ để quay lại menu..." -ForegroundColor Gray
+            $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        }
+        '5' {
+            Write-Host "`n[>] Đang tải phần mềm về thư mục Downloads..." -ForegroundColor Green
+            
+            # 💡 Thay liên kết dưới đây bằng đường dẫn Direct Link (Raw hoặc Release) file phần mềm của bạn
+            $downloadUrl = "https://github.com/Danhle999/myscript/releases/download/v1.0.0/PhanMem.exe"
+            
+            # Đường dẫn lưu file trực tiếp vào thư mục Downloads của người dùng
+            $savePath = "$env:USERPROFILE\Downloads\PhanMem.exe"
+            
+            try {
+                Invoke-WebRequest -Uri $downloadUrl -OutFile $savePath -ErrorAction Stop
+                Write-Host "--> Tải thành công! File đã được lưu tại: $savePath" -ForegroundColor Yellow
+                
+                # Tự động mở file vừa tải (Nếu không muốn tự mở, bạn có thể xóa dòng dưới)
+                Start-Process $savePath
+            }
+            catch {
+                Write-Host "--> Lỗi khi tải file: $_" -ForegroundColor Red
+            }
+
             Write-Host "`nNhấn phím bất kỳ để quay lại menu..." -ForegroundColor Gray
             $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         }
