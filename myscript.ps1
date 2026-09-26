@@ -22,7 +22,7 @@ do {
     $key =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
     $char =$key.Character
     Write-Host $char -ForegroundColor Cyan
-    Start-Sleep -Milliseconds 200
+    Start-Sleep -Milliseconds 150
 
     switch ($char) {
         '1' {
@@ -39,7 +39,8 @@ do {
         }
         '3' {
             Write-Host "`n[>] Đang kiểm tra bản quyền Windows (slmgr /dli)..." -ForegroundColor Green
-            Start-Process cscript.exe -ArgumentList "$env:SystemRoot\System32\slmgr.vbs /dli" -Wait
+            # Chạy trực tiếp lệnh slmgr /dli
+            slmgr /dli
             Write-Host "`nNhấn phím bất kỳ để quay lại menu..." -ForegroundColor Gray
             $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         }
