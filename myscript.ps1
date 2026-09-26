@@ -9,7 +9,7 @@ function Show-Menu {
     Write-Host "    [2] Chạy GetIWC (getiwc.online)"
     Write-Host "    [3] Kiểm tra bản quyền Windows (slmgr /dli)"
     Write-Host "    [4] Xem Serial Number BIOS"
-    Write-Host "    [5] Tải & cài đặt ShowKeyPlus (ShowKeyPlus Installer.exe)"
+    Write-Host "    [5] Tải & chạy ShowKeyPlus (ShowKeyPlus.exe)"
     Write-Host "    [0] Thoát"
     Write-Host ""
     Write-Host "==========================================================================" -ForegroundColor Cyan
@@ -52,23 +52,23 @@ do {
             $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         }
         '5' {
-            Write-Host "`n[>] Đang tải ShowKeyPlus Installer từ GitHub..." -ForegroundColor Green
+            Write-Host "`n[>] Đang tải ShowKeyPlus.exe từ GitHub..." -ForegroundColor Green
             
-            # Cấu hình TLS 1.2 cho kết nối an toàn với GitHub
+            # Cấu hình TLS 1.2
             [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
             $ProgressPreference = 'SilentlyContinue'
             
-            # Direct Raw Link tới file ShowKeyPlus Installer.exe
-            $downloadUrl = "https://raw.githubusercontent.com/Danhle999/myscript/main/ShowKeyPlus%20Installer.exe"
-            $savePath = "$env:USERPROFILE\Downloads\ShowKeyPlus_Installer.exe"
+            # Direct Raw Link tải file ShowKeyPlus.exe
+            $downloadUrl = "https://raw.githubusercontent.com/Danhle999/mycript/main/ShowKeyPlus.exe"
+            $savePath = "$env:USERPROFILE\Downloads\ShowKeyPlus.exe"
             
             try {
-                # Đã sửa lỗi: Có khoảng trắng chuẩn giữa -OutFile và $savePath
-                Invoke-WebRequest -Uri $downloadUrl -OutFile$savePath -UseBasicParsing -ErrorAction Stop
+                # Tải file bằng lệnh irm (có khoảng trắng chuẩn với -OutFile)
+                irm $downloadUrl -OutFile$savePath -ErrorAction Stop
                 Write-Host "--> Tải thành công! File lưu tại: $savePath" -ForegroundColor Yellow
                 
-                # Mở file bộ cài sau khi tải xong
-                Write-Host "--> Đang mở bộ cài đặt..." -ForegroundColor Cyan
+                # Khởi chạy ứng dụng ShowKeyPlus vừa tải về
+                Write-Host "--> Đang chạy ShowKeyPlus..." -ForegroundColor Cyan
                 Start-Process $savePath
             }
             catch {
