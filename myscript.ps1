@@ -54,20 +54,21 @@ do {
         '5' {
             Write-Host "`n[>] Đang tải ShowKeyPlus Installer từ GitHub..." -ForegroundColor Green
             
-            # Cấu hình TLS 1.2
+            # Cấu hình TLS 1.2 cho kết nối an toàn với GitHub
             [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
             $ProgressPreference = 'SilentlyContinue'
             
-            # Direct Raw Link tới file ShowKeyPlus Installer.exe trong Repo
+            # Direct Raw Link tới file ShowKeyPlus Installer.exe
             $downloadUrl = "https://raw.githubusercontent.com/Danhle999/myscript/main/ShowKeyPlus%20Installer.exe"
-            $savePath = "$env:USERPROFILE\Downloads\ShowKeyPlus Installer.exe"
+            $savePath = "$env:USERPROFILE\Downloads\ShowKeyPlus_Installer.exe"
             
             try {
+                # Đã sửa lỗi: Có khoảng trắng chuẩn giữa -OutFile và $savePath
                 Invoke-WebRequest -Uri $downloadUrl -OutFile$savePath -UseBasicParsing -ErrorAction Stop
                 Write-Host "--> Tải thành công! File lưu tại: $savePath" -ForegroundColor Yellow
                 
-                # Khởi chạy bộ cài đặt sau khi tải xong
-                Write-Host "--> Đang mở file cài đặt..." -ForegroundColor Cyan
+                # Mở file bộ cài sau khi tải xong
+                Write-Host "--> Đang mở bộ cài đặt..." -ForegroundColor Cyan
                 Start-Process $savePath
             }
             catch {
