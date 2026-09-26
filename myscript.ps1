@@ -12,17 +12,17 @@ function Show-Menu {
     Write-Host "    [0] Thoát"
     Write-Host ""
     Write-Host "==========================================================================" -ForegroundColor Cyan
-    Write-Host "Lựa chọn của bạn [1-4, 0]: " -NoNewline -ForegroundColor Yellow
+    Write-Host "Chọn chức năng [1-4, 0]: " -NoNewline -ForegroundColor Yellow
 }
 
 do {
     Show-Menu
     
-    # Đọc phím bấm trực tiếp từ bàn phím
+    # Lắng nghe phím gõ trực tiếp (không cần nhấn Enter)
     $key =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
     $char =$key.Character
     Write-Host $char -ForegroundColor Cyan
-    Start-Sleep -Milliseconds 150
+    Start-Sleep -Milliseconds 200
 
     switch ($char) {
         '1' {
@@ -51,11 +51,11 @@ do {
             $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         }
         '0' {
-            Write-Host "`n[!] Đang thoát..." -ForegroundColor Red
+            Write-Host "`n[!] Đang thoát chương trình..." -ForegroundColor Red
             break
         }
         Default {
-            Write-Host "`n[!] Phím bấm không hợp lệ, vui lòng bấm phím từ 0 đến 4!" -ForegroundColor Red
+            Write-Host "`n[!] Lựa chọn không hợp lệ!" -ForegroundColor Red
             Start-Sleep -Seconds 1
         }
     }
