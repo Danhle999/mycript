@@ -51,41 +51,28 @@ do {
             Write-Host "`nNhấn phím bất kỳ để quay lại menu..." -ForegroundColor Gray
             $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         }
-        '5' {
-            Write-Host "`n[>] Đang tải ShowKeyPlus.exe từ GitHub..." -ForegroundColor Green
+        ''5' {
+            Write-Host "`n[>] Đang tải ShowKeyPlus Installer từ GitHub..." -ForegroundColor Green
             
-            # Cấu hình TLS 1.2
+            # Cấu hình TLS 1.2 cho kết nối an toàn với GitHub
             [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
             $ProgressPreference = 'SilentlyContinue'
             
-            # Link Direct Raw tới file ShowKeyPlus.exe
-            $downloadUrl = "https://raw.githubusercontent.com/Danhle999/mycript/main/ShowKeyPlus.exe"
-            
-            # Thư mục lưu file
-            $downloadFolder = "$env:USERPROFILE\Downloads"
-            $savePath = Join-Path -Path$downloadFolder -ChildPath "ShowKeyPlus.exe"
+            # Direct Raw Link tới file ShowKeyPlus Installer.exe
+            $downloadUrl = "https://raw.githubusercontent.com/Danhle999/myscript/main/ShowKeyPlus%20Installer.exe"
+            $savePath = "$env:USERPROFILE\Downloads\ShowKeyPlus_Installer.exe"
             
             try {
-                # Kiểm tra nếu thư mục Downloads chưa tồn tại thì tự động tạo
-                if (-not (Test-Path -Path $downloadFolder)) {
-                    New-Item -ItemType Directory -Path $downloadFolder -Force | Out-Null
-                }
-
-                # Tải file về máy
-                irm $downloadUrl -OutFile$savePath -ErrorAction Stop
+                # Đã sửa lỗi: Có khoảng trắng chuẩn giữa -OutFile và $savePath
+                Invoke-WebRequest -Uri $downloadUrl -OutFile$savePath -UseBasicParsing -ErrorAction Stop
                 Write-Host "--> Tải thành công! File lưu tại: $savePath" -ForegroundColor Yellow
                 
-                # Mở file ứng dụng
-                if (Test-Path -Path $savePath) {
-                    Write-Host "--> Đang mở ShowKeyPlus..." -ForegroundColor Cyan
-                    Start-Process -FilePath $savePath
-                } else {
-                    Write-Host "[!] Không tìm thấy file sau khi tải!" -ForegroundColor Red
-                }
+                # Mở file bộ cài sau khi tải xong
+                Write-Host "--> Đang mở bộ cài đặt..." -ForegroundColor Cyan
+                Start-Process $savePath
             }
             catch {
                 Write-Host "`n[!] LỖI TẢI FILE: $_" -ForegroundColor Red
-                Write-Host "[!] Vui lòng kiểm tra lại link URL trên GitHub (mycript hay myscript)!" -ForegroundColor Yellow
             }
             finally {
                 $ProgressPreference = 'Continue'
