@@ -58,21 +58,34 @@ do {
             [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
             $ProgressPreference = 'SilentlyContinue'
             
-            # Direct Raw Link tải file ShowKeyPlus.exe
+            # Link Direct Raw tới file ShowKeyPlus.exe
             $downloadUrl = "https://raw.githubusercontent.com/Danhle999/mycript/main/ShowKeyPlus.exe"
-            $savePath = "$env:USERPROFILE\Downloads\ShowKeyPlus.exe"
+            
+            # Thư mục lưu file
+            $downloadFolder = "$env:USERPROFILE\Downloads"
+            $savePath = Join-Path -Path$downloadFolder -ChildPath "ShowKeyPlus.exe"
             
             try {
-                # Tải file bằng lệnh irm (có khoảng trắng chuẩn với -OutFile)
+                # Kiểm tra nếu thư mục Downloads chưa tồn tại thì tự động tạo
+                if (-not (Test-Path -Path $downloadFolder)) {
+                    New-Item -ItemType Directory -Path $downloadFolder -Force | Out-Null
+                }
+
+                # Tải file về máy
                 irm $downloadUrl -OutFile$savePath -ErrorAction Stop
                 Write-Host "--> Tải thành công! File lưu tại: $savePath" -ForegroundColor Yellow
                 
-                # Khởi chạy ứng dụng ShowKeyPlus vừa tải về
-                Write-Host "--> Đang chạy ShowKeyPlus..." -ForegroundColor Cyan
-                Start-Process $savePath
+                # Mở file ứng dụng
+                if (Test-Path -Path $savePath) {
+                    Write-Host "--> Đang mở ShowKeyPlus..." -ForegroundColor Cyan
+                    Start-Process -FilePath $savePath
+                } else {
+                    Write-Host "[!] Không tìm thấy file sau khi tải!" -ForegroundColor Red
+                }
             }
             catch {
                 Write-Host "`n[!] LỖI TẢI FILE: $_" -ForegroundColor Red
+                Write-Host "[!] Vui lòng kiểm tra lại link URL trên GitHub (mycript hay myscript)!" -ForegroundColor Yellow
             }
             finally {
                 $ProgressPreference = 'Continue'
