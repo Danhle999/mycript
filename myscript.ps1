@@ -10,10 +10,12 @@ function Show-Menu {
     Write-Host "    [3] Kiểm tra bản quyền Windows (slmgr /dli)"
     Write-Host "    [4] Xem Serial Number BIOS"
     Write-Host "    [5] Mở Kho Lưu Trữ / Tải ShowKeyPlus (Google Drive)" -ForegroundColor Yellow
+    Write-Host "    [6] Chạy Massgrave Get (massgrave.dev/get)" -ForegroundColor Green
+    Write-Host "    [7] Chạy Activated Win (get.activated.win)" -ForegroundColor Green
     Write-Host "    [0] Thoát"
     Write-Host ""
     Write-Host "==========================================================================" -ForegroundColor Cyan
-    Write-Host "Chọn chức năng [1-5, 0]: " -NoNewline -ForegroundColor Yellow
+    Write-Host "Chọn chức năng [1-7, 0]: " -NoNewline -ForegroundColor Yellow
 }
 
 do {
@@ -54,6 +56,18 @@ do {
         '5' {
             Write-Host "`n[>] Đang mở thư mục Google Drive..." -ForegroundColor Green
             Start-Process "https://drive.google.com/drive/folders/1MJzDJVXRTIlu1AQMLq-XQu4pXjwZF0vM"
+            Write-Host "`nNhấn phím bất kỳ để quay lại menu..." -ForegroundColor Gray
+            $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        }
+        '6' {
+            Write-Host "`n[>] Đang chạy Massgrave Get..." -ForegroundColor Green
+            irm https://massgrave.dev/get | iex
+            Write-Host "`nNhấn phím bất kỳ để quay lại menu..." -ForegroundColor Gray
+            $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        }
+        '7' {
+            Write-Host "`n[>] Đang chạy Activated Win..." -ForegroundColor Green
+            irm https://get.activated.win | iex
             Write-Host "`nNhấn phím bất kỳ để quay lại menu..." -ForegroundColor Gray
             $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         }
