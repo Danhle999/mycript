@@ -12,10 +12,11 @@ function Show-Menu {
     Write-Host "    [5] Mở Kho Lưu Trữ / Tải ShowKeyPlus (Google Drive)" -ForegroundColor Yellow
     Write-Host "    [6] Chạy Massgrave Get (massgrave.dev/get)" -ForegroundColor Green
     Write-Host "    [7] Chạy Activated Win (get.activated.win)" -ForegroundColor Green
+    Write-Host "    [8] Mở cài đặt Hệ thống & Bộ nhớ ảo (sysdm.cpl)" -ForegroundColor Magenta
     Write-Host "    [0] Thoát"
     Write-Host ""
     Write-Host "==========================================================================" -ForegroundColor Cyan
-    Write-Host "Chọn chức năng [1-7, 0]: " -NoNewline -ForegroundColor Yellow
+    Write-Host "Chọn chức năng [1-8, 0]: " -NoNewline -ForegroundColor Yellow
 }
 
 do {
@@ -68,6 +69,12 @@ do {
         '7' {
             Write-Host "`n[>] Đang chạy Activated Win..." -ForegroundColor Green
             irm https://get.activated.win | iex
+            Write-Host "`nNhấn phím bất kỳ để quay lại menu..." -ForegroundColor Gray
+            $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        }
+        '8' {
+            Write-Host "`n[>] Đang mở bảng System Properties (Cài đặt Bộ nhớ ảo & Hiệu suất)..." -ForegroundColor Magenta
+            sysdm.cpl
             Write-Host "`nNhấn phím bất kỳ để quay lại menu..." -ForegroundColor Gray
             $null =$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
         }
